@@ -1,18 +1,15 @@
-# load libraries
+# load packages
 library(data.table)
 library(dplyr)
 
-filename <- "getdata_dataset.zip"
+path <- getwd()
 
 # downloading the data
-if (!file.exists(filename)){
-  fileURL <- "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip "
-  download.file(fileURL, filename, method="curl")
-}  
-if (!file.exists("UCI HAR Dataset")) { 
-  unzip(filename) 
-}
+fileUrl <- "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
+download.file(fileUrl, file.path(path, "dataFiles.zip"))
+unzip(zipfile = "dataFiles.zip")
 
+#load data
 subjectTrain <- read.table("UCI HAR Dataset/train/subject_train.txt", header = FALSE)
 yTrain <- read.table("UCI HAR Dataset/train/y_train.txt", header = FALSE)
 xTrain <- read.table("UCI HAR Dataset/train/X_train.txt", header = FALSE)
@@ -31,7 +28,7 @@ colnames(activity) <- "Activity"
 FinalData <- cbind(features,activity,subject)
 
 # Extracting only the measurements on the mean and standard deviation for each measurement
-head(select(mean|SD,names(FinalData)), na.rm = TRUE
+extract_features <- grepl("mean|std", features)
  
 # create second independent tiny data
 extractedData$Subject <- as.factor(extractedData$Subject)
